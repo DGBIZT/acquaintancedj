@@ -1,10 +1,9 @@
-
 from django.db import models
 
 # Create your models here.
 class Category(models.Model):
     title = models.CharField(max_length=150, verbose_name="Название")
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
     # author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
 
     def __str__(self):

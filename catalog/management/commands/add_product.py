@@ -5,16 +5,16 @@ from django.db import connection
 from django.utils import timezone
 
 class Command(BaseCommand):
-    help = "Добавление книги с тестами в базу данных"
+    help = "Добавление продукта с тестами в базу данных"
 
     def handle(self, *args, **options):
         category, _ = Category.objects.get_or_create(title = "Фрукт")
 
         products = [
-            {'title': 'Вишня', 'description':"Вишня — плодовое дерево или кустарник семейства розоцветных "
-                                             "с мелкими сочными тёмно-красными плодами. "
-                                             "Также вишней называют плод такого дерева или кустарника. ",
-             "image": "Вишня.jpg", 'category_id': 8, 'purchase_price': 99.99}
+            {'title': 'Красное яблоко', 'description':"Красное яблоко — это плод, "
+                                             "который содержит антоцианы — пигменты, "
+                                             "придающие плодам красный, синий или фиолетовый оттенок. ",
+             "image": "photos/Apple_is_Red.jpg", 'category_id': 8, 'purchase_price': 86.59}
         ]
 
         for product in products:

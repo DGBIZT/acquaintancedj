@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from catalog.models import Product
+
 
 # Create your views here.
 
@@ -12,3 +14,50 @@ def home(request):
 
 def contacts(request):
     return render(request, "catalog/contacts.html")
+
+def product_information(request):
+
+    product = Product.objects.get(id=3)
+    context = {
+        "product_name": f'{product.title}',
+        'product_description': f'{product.description}',
+        'product_image': f'{product.image}',
+    }
+
+    return render(request, "catalog/productinform.html", context=context)
+
+
+def product_detail(request):
+
+    # product = Product.objects.get(id=3)
+    #
+    # if product.image:
+    #     print(f"URL изображения: {product.image.url}")  # Должно вывести /media/photos/Buckwheat.jpg
+    #
+    # context = {
+    #     "product": product,
+    # }
+    # return render(request, "catalog/product_detail.html", context=context)
+    try:
+        product = Product.objects.get(id=5)
+
+        if not product.image:
+            print("Изображение не загружено")
+        elif not product.image.storage.exists(product.image.name):
+            print(f"Файл не существует по пути: {product.image.path}")
+
+        print(f"Путь в БД: {product.image.name}")  # Должно быть photos/Buckwheat.jpg
+        print(f"URL: {product.image.url}")  # Должно быть /media/photos/Buckwheat.jpg
+        print(f"Физический путь: {product.image.path}")  # Полный путь к файлу
+        print(f"Полный путь к файлу: {product.image.path}")
+    except Product.DoesNotExist:
+        product = None
+
+    context = {
+        "product": product,
+    }
+    return render(request, 'catalog/product_detail.html', context)
+
+
+def index(request):
+    return render(request, "catalog/index.html")
