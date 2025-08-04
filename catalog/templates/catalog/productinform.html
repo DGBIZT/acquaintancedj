@@ -10,10 +10,9 @@
     <h1>Информация о продукте</h1>
     <p>Наименование продукта: {{ product_name }}</p>
     <p>Информация о продукте: {{ product_description }}</p>
-    <p>Картинка продукта: {{ product_image }}</p>
+    <p>Картинка продукта: <img src="{{ product_image.url }}" alt = '{{ product_name }}' ></p>
 
 
-
-<script type="text/javascript" src="/static/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap/bootstrap.bundle.min.js"></script>
 </body>
 </html>

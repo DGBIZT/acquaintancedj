@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная страница</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css">
-    
+    <title>BASE</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap/bootstrap.min.css' %}">
+
 </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
@@ -74,6 +76,6 @@
         </div>
     </footer>
 </div>
-<script type="text/javascript" src="/static/js/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

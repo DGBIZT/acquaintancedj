@@ -21,25 +21,16 @@ def product_information(request):
     context = {
         "product_name": f'{product.title}',
         'product_description': f'{product.description}',
-        'product_image': f'{product.image}',
+        'product_image': product.image , # передаем само поле image - product.image , а не его строковое представление f'{product.image}'
     }
 
     return render(request, "catalog/productinform.html", context=context)
 
 
-def product_detail(request):
+def product_detail(request, product_id):
 
-    # product = Product.objects.get(id=3)
-    #
-    # if product.image:
-    #     print(f"URL изображения: {product.image.url}")  # Должно вывести /media/photos/Buckwheat.jpg
-    #
-    # context = {
-    #     "product": product,
-    # }
-    # return render(request, "catalog/product_detail.html", context=context)
     try:
-        product = Product.objects.get(id=5)
+        product = Product.objects.get(id=product_id)
 
         if not product.image:
             print("Изображение не загружено")
@@ -61,3 +52,9 @@ def product_detail(request):
 
 def index(request):
     return render(request, "catalog/index.html")
+
+
+def base(request):
+    products = Product.objects.all()
+    context = {'products': products}
+    return render(request, 'catalog/base.html', context)

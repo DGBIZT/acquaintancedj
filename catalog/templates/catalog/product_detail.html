@@ -7,16 +7,19 @@
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css">
 </head>
 <body>
-    <h1>Информация(detail) о продукте</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Информация(detail) о продукте</h1>
 
-    <p>Наименование продукта: {{product.title}}</p>
-    <p>Картинка продукта: <img src="{{product.image.url}}" alt="Рис"></p>
-    <p>Информация о продукте: {{product.description }}</p>
-    <p>Цена: {{ product.purchase_price}}</p>
-    <p>Дата добавления продукта: {{product.created_at}}</p>
-    <p>Дата обновления продукта: {{product.updated_at}}</p>
-    <!--<p>Сгенерированный путь к изображению: {{ product.image.url }}</p>-->
-    <!--<img src="/media/photos/Rice.jpg" alt="Рис">-->
+        <p>Наименование продукта: {{product.title}}</p>
+        <p>Картинка продукта:</p>
+        <img src="{{product.image.url}}" alt="{{product.title}}">
+        <p>Информация о продукте: {{product.description|truncatechars:100 }}</p>
+        <p>Цена: {{product.purchase_price}}</p>
+        <p>Дата добавления продукта: {{product.created_at|date:"d M Y"}}</p>
+        <p>Дата обновления продукта: {{product.updated_at|date:"d M Y"}}</p>
+        <!--<p>Сгенерированный путь к изображению: {{ product.image.url }}</p>-->
+        <!--<img src="/media/photos/Rice.jpg" alt="Рис">-->
+    </div>
 
 
 
