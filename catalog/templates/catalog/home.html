@@ -12,25 +12,25 @@
     <div class="row row-cols-1 row-cols-md-3 g-4"> <!-- g-4 добавляет отступы между карточками -->
         {% for product in products %}
             <div class="col">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <img src="{{ product.image.url }}" alt="{{ product.title }}" class="card-img-top" width="300" height="300">
+                <div class="card  card-list mb-4">
+                    <div class="card-header card-header-list">
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}" class="card-img-top card-img-top-list" width="300" height="300">
                     </div>
                     <div class="card-body" style="display: flex;
                                                   flex-direction: column;
                                                   justify-content: space-between;
                                                   padding: 15px;
                                                   height: 100%;">
-                        <h5 class="card-title">{{ product.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">₽ {{ product.purchase_price }}</h6>
-                        <div class="card-text">
+                        <h5 class="card-title card-title-list">{{ product.title }}</h5>
+                        <h6 class="card-subtitle card-subtitle-list mb-2 text-muted">₽ {{ product.purchase_price }}</h6>
+                        <div class="card-text card-text-list">
                             {{ product.description|truncatechars:100 }}
                         </div>
                         <ul class="list-unstyled">
                             <li>Дата добавления продукта: {{product.created_at|date:"d M Y"}}</li>
                             <li>Дата обновления продукта: {{product.updated_at|date:"d M Y"}}</li>
                         </ul>
-                        <button type="button" class="btn btn-lg btn-outline-primary custom-button">Купить</button>
+                        <button type="button" class="btn btn-lg btn-outline-primary custom-button custom-button-list">Купить</button>
                     </div>
                 </div>
             </div>

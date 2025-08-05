@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>product_detail</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Информация(detail) о продукте</h1>
+{% extends 'catalog/base.html' %}
 
+{% block title %}Детали продукта{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Информация о продукте</h1>
+</div>
+<div class="container ">
         <p>Наименование продукта: {{product.title}}</p>
         <p>Картинка продукта:</p>
         <img src="{{product.image.url}}" alt="{{product.title}}">
@@ -20,9 +17,4 @@
         <!--<p>Сгенерированный путь к изображению: {{ product.image.url }}</p>-->
         <!--<img src="/media/photos/Rice.jpg" alt="Рис">-->
     </div>
-
-
-
-<script type="text/javascript" src="/static/js/bootstrap/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}
