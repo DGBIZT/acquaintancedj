@@ -22,7 +22,7 @@ def product_information(request):
     context = {
         "product_name": f'{product.title}',
         'product_description': f'{product.description}',
-        'product_image': product.image , # передаем само поле image - product.image , а не его строковое представление f'{product.image}'
+        'product_image': product.image , # передаем само поле image - product.image, а не его строковое представление f'{product.image}'
     }
     return render(request, "catalog/productinform.html", context=context)
 

@@ -30,6 +30,7 @@
                             <li>Дата добавления продукта: {{product.created_at|date:"d M Y"}}</li>
                             <li>Дата обновления продукта: {{product.updated_at|date:"d M Y"}}</li>
                         </ul>
+                        <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
                         <button type="button" class="btn btn-lg btn-outline-primary custom-button custom-button-list">Купить</button>
                     </div>
                 </div>
