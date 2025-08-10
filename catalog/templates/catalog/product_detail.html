@@ -1,0 +1,20 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Детали продукта{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Информация о продукте</h1>
+</div>
+<div class="container ">
+        <p>Наименование продукта: {{product.title}}</p>
+        <p>Картинка продукта:</p>
+        <img src="{{product.image.url}}" alt="{{product.title}}">
+        <p>Информация о продукте: {{product.description|truncatechars:100 }}</p>
+        <p>Цена: {{product.purchase_price}}</p>
+        <p>Дата добавления продукта: {{product.created_at|date:"d M Y"}}</p>
+        <p>Дата обновления продукта: {{product.updated_at|date:"d M Y"}}</p>
+        <!--<p>Сгенерированный путь к изображению: {{ product.image.url }}</p>-->
+        <!--<img src="/media/photos/Rice.jpg" alt="Рис">-->
+    </div>
+{% endblock %}
