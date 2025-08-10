@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',   # Система сообщений
     'django.contrib.staticfiles', # Управление статическими файлами
 
-    'catalog',                   # Ваше приложение
+    'catalog',
+    'blog',
 ]
 
 
