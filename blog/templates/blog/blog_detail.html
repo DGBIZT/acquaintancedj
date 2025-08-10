@@ -12,6 +12,10 @@
         <img src="{{blog.image.url}}" alt="{{blog.title}}">
         <p>Информация о продукте: {{blog.content}}</p>
         <p>Дата публикации: {{blog.created_at|date:"d M Y"}}</p>
+        <p>
+            <a href="{% url 'blog:blog_update' blog.pk %}" class="btn btn-secondary">Редактировать</a>
+            <a href="{% url 'blog:blog_list' %}" class="btn btn-primary">Вернуться</a>
+        </p>
 
     </div>
 {% endblock %}
