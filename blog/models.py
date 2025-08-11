@@ -20,9 +20,7 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
-    def increase_views_count(self):
-        self.views_count += 1
-        self.save(update_fields=['views_count'])
+
 
     class Meta:
         verbose_name = 'Блог'

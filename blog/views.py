@@ -26,6 +26,12 @@ class BlogDetailView(DetailView):
     template_name = 'blog/blog_detail.html'
     context_object_name = 'blog'
 
+    def get_object(self, queryset=None): # Счетчик просмотра страницы блога
+        self.object = super().get_object(queryset)
+        self.object.views_count += 1
+        self.object.save()
+        return self.object
+
 class BlogCreateView(CreateView):
     model = Blog
     fields = ['title', 'content', 'image']
@@ -41,7 +47,7 @@ class BlogUpdateView(UpdateView):
     template_name = 'blog/blog_form.html'
     # success_url = reverse_lazy('blog:blog_detail')
 
-    def get_success_url(self):
+    def get_success_url(self): # Возвращение на страницу только что отредактируемого блога
         return reverse_lazy('blog:blog_detail', kwargs={'pk': self.object.pk})
 
 
