@@ -9,7 +9,7 @@ from blog.models import Blog
 # Create your views here.
 class SubmitDataView(View): # SubmitDataView — это гибкий инструмент для обработки HTTP-запросов в Django
 
-    def post(self): # def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): # def post(self, request, *args, **kwargs):
         return HttpResponse("Данные отправлены")
 
 class BlogListView(ListView):
@@ -26,7 +26,10 @@ class BlogCreateView(CreateView):
     model = Blog
     fields = ['title', 'content', 'image']
     template_name = 'blog/blog_form.html'
-    success_url = reverse_lazy('blog:blog_detail')
+    # success_url = reverse_lazy('blog:blog_detail')
+
+    def get_success_url(self):
+        return reverse_lazy('blog:blog_detail', kwargs={'pk': self.object.pk})
 
 class BlogUpdateView(UpdateView):
     model = Blog
