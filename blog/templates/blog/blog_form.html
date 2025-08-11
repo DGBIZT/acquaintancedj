@@ -16,10 +16,12 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Сохранить</button>
+
         {% if object %}
+            <button type="submit" class="btn btn-primary">Сохранить</button>
             <a href="{% url 'blog:blog_detail' object.pk %}" class="btn btn-primary">Отменить</a>
         {% else %}
+            <button type="submit" class="btn btn-primary">Создать</button>
             <a href="{% url 'blog:blog_list' %}" class="btn btn-primary">Отмена</a>
         {% endif %}
     </form>
