@@ -9,7 +9,7 @@ from blog.models import Blog
 # Create your views here.
 class SubmitDataView(View): # SubmitDataView — это гибкий инструмент для обработки HTTP-запросов в Django
 
-    def post(self): # def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): # def post(self, request, *args, **kwargs):
         return HttpResponse("Данные отправлены")
 
 class BlogListView(ListView):
@@ -17,18 +17,22 @@ class BlogListView(ListView):
     template_name = 'blog/blogs_list.html'
     context_object_name = 'blogs'
 
+    def get_queryset(self):
+        # Фильтруем только опубликованные статьи
+        return Blog.objects.filter(is_published=True)
+
 class BlogDetailView(DetailView):
     model = Blog
     template_name = 'blog/blog_detail.html'
     context_object_name = 'blog'
 
-class BlogCreateView(CreateView):
-    model = Blog
-    fields = ['title', 'content', 'image']
-    template_name = 'blog/blog_form.html'
-    success_url = reverse_lazy('blog:blog_detail')
+    def get_object(self, queryset=None): # Счетчик просмотра страницы блога
+        self.object = super().get_object(queryset)
+        self.object.views_count += 1
+        self.object.save()
+        return self.object
 
-class BlogUpdateView(UpdateView):
+class BlogCreateView(CreateView):
     model = Blog
     fields = ['title', 'content', 'image']
     template_name = 'blog/blog_form.html'
@@ -37,8 +41,18 @@ class BlogUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('blog:blog_detail', kwargs={'pk': self.object.pk})
 
+class BlogUpdateView(UpdateView):
+    model = Blog
+    fields = ['title', 'content', 'image']
+    template_name = 'blog/blog_form.html'
+    # success_url = reverse_lazy('blog:blog_detail')
+
+    def get_success_url(self): # Возвращение на страницу только что отредактируемого блога
+        return reverse_lazy('blog:blog_detail', kwargs={'pk': self.object.pk})
+
+
 class BlogDeleteView(DeleteView):
     model = Blog
-    template_name = 'Blog/blog_confirm_delete.html'
-    success_url = reverse_lazy('blog:blogs_list')
+    template_name = 'blog/blog_config_delete.html'
+    success_url = reverse_lazy('blog:blog_list')
 
