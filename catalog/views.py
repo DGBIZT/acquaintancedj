@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import View, ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import View, ListView, DetailView, TemplateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from catalog.models import Product
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -24,6 +26,34 @@ class ProductTemplateView(TemplateView):
     model = Product
     template_name = 'catalog/contacts.html'
     context_object_name = 'contacts'
+
+class ProductCreateView(CreateView):
+    model = Product
+    fields = ['title', 'description', 'image', 'purchase_price', 'category']
+    template_name = 'catalog/catalog_form.html'
+    # success_url = reverse_lazy('blog:blog_detail')
+
+    def get_success_url(self):
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ['title', 'description', 'image', 'purchase_price',]
+    template_name = 'catalog/catalog_form.html'
+    # success_url = reverse_lazy('blog:blog_detail')
+
+    def get_success_url(self): # Возвращение на страницу только что отредактируемого блога
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'catalog/product_config_delete.html'
+    success_url = reverse_lazy('catalog:home')
+
+
 
 
 
