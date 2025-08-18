@@ -9,7 +9,6 @@
 ```
 https://github.com/DGBIZT/acquaintancedj.git
 ```
-3.
 ###### №1
 ```
 1. Настройка проекта.
@@ -19,7 +18,6 @@ https://github.com/DGBIZT/acquaintancedj.git
     * contacts.html
 4. Реализация контроллеров
 ```
-4.
 ###### №2
 ```
 1. Подключение СУБД PostgreSQL
