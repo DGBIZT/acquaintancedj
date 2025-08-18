@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Category
+from .models import Product
 from django.core.exceptions import ValidationError
 
 # Список запрещённых слов
@@ -9,8 +9,8 @@ FORBIDDEN_WORDS = {
 }
 def validate_forbidden_words(value):
     """
-     Проверяет, что текст не содержит запрещённых слов.
-     """
+    Проверяет, что текст не содержит запрещённых слов.
+    """
     words = value.lower().split()
     cleaned_words = {word.strip(".,?!:;\"'()[]{}") for word in words}
     found = FORBIDDEN_WORDS.intersection(cleaned_words)
@@ -22,16 +22,41 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ['title', 'description', 'image', 'purchase_price', 'category',]
 
-        widgets = {
-            'title': forms.TextInput(attrs={'placeholder': 'Введите название товара'}),
-            'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Описание продукта'}),
-            'purchase_price': forms.NumberInput(attrs={'min': '0', 'step': '0.01'}),
-        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        # help_texts = {
-        #     'title': 'Не более 100 символов. Запрещены слова: казино, крипта, бесплатно и др.',
-        #     'purchase_price': 'Стоимость закупки без скидок.',
-        # }
+        self.fields['title'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder' : 'Введите название товара'
+        })
+
+        self.fields['description'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Описание продукта'
+        })
+
+        self.fields['purchase_price'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Введите цену'
+        })
+
+        self.fields['image'].widget.attrs.update({
+            'class': 'form-control',
+        })
+
+        self.fields['category'].widget.attrs.update({
+            'class': 'form-control',
+        })
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        validate_forbidden_words(title)
+        return title
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        validate_forbidden_words(description)
+        return description
 
     def clean_purchase_price(self):
         price = self.cleaned_data.get('purchase_price')
