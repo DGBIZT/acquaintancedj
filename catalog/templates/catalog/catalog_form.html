@@ -1,0 +1,29 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %} Форма для продуктов {% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+        {% if object %}
+            Редактирование продукта {{ object.title }}
+        {% else %}
+            Добавление нового продукта
+        {% endif %}
+    </h1>
+</div>
+<div class="container ">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if object %}
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="{% url 'catalog:product_detail' object.pk %}" class="btn btn-primary">Отменить</a>
+        {% else %}
+            <button type="submit" class="btn btn-primary">Создать</button>
+            <a href="{% url 'catalog:home' %}" class="btn btn-primary">Отмена</a>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock %}

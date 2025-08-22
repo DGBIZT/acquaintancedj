@@ -3,6 +3,8 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from blog.forms import BlogForm
 from blog.models import Blog
 
 
@@ -34,7 +36,7 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(CreateView):
     model = Blog
-    fields = ['title', 'content', 'image']
+    form_class = BlogForm
     template_name = 'blog/blog_form.html'
     # success_url = reverse_lazy('blog:blog_detail')
 
@@ -43,7 +45,7 @@ class BlogCreateView(CreateView):
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = ['title', 'content', 'image']
+    form_class = BlogForm
     template_name = 'blog/blog_form.html'
     # success_url = reverse_lazy('blog:blog_detail')
 
