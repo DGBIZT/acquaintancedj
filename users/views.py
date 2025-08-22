@@ -1,10 +1,11 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+from django.contrib.auth.views import LoginView
 from django.conf import settings
 from django.core.mail import send_mail
 from pyexpat.errors import messages
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm
 
 
 class RegisterView(CreateView):
@@ -28,6 +29,10 @@ class RegisterView(CreateView):
             # Обработка
             print(f"Ошибка при отправке письма: {e}")
 
+class CustomLoginView(LoginView):
+    form_class = CustomAuthenticationForm
+    template_name = 'users/login.html'
+    success_url = reverse_lazy('catalog:home')
 
 
 
