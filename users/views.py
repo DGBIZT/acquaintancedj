@@ -1,10 +1,10 @@
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib.auth.views import LoginView
 from django.conf import settings
 from django.core.mail import send_mail
-from pyexpat.errors import messages
-
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 
 
@@ -14,9 +14,18 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('catalog:home')
 
     def form_valid(self, form):
-        user = form.save()
+        # Получаем объект пользователя
+        user = form.save(commit=False)
+        # Устанавливаем статус активности
+        user.is_active = True
+        # Сохраняем пользователя
+        user.save()
+        # Отправляем приветственное письмо
         self.send_welcome_email(user.email)
-        return super().form_valid(form)
+        # Автоматически авторизуем пользователя
+        login(self.request, user)  # Логиним пользователя
+        # return super().form_valid(form)
+        return redirect(self.success_url)
 
     def send_welcome_email(self, user_email):
         subject = 'Добро пожаловать в наш рынок онлайн'
@@ -33,6 +42,16 @@ class CustomLoginView(LoginView):
     form_class = CustomAuthenticationForm
     template_name = 'users/login.html'
     success_url = reverse_lazy('catalog:home')
+
+    # обработка ошибок
+    def form_invalid(self, form):
+        print(form.errors)  # Для отладки
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        print(f"Пользователь {form.cleaned_data['username']} успешно вошел")
+        return response
 
 
 
