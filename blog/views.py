@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from blog.forms import BlogForm
 from blog.models import Blog
@@ -23,7 +24,7 @@ class BlogListView(ListView):
         # Фильтруем только опубликованные статьи
         return Blog.objects.filter(is_published=True)
 
-class BlogDetailView(DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
     template_name = 'blog/blog_detail.html'
     context_object_name = 'blog'
@@ -34,7 +35,7 @@ class BlogDetailView(DetailView):
         self.object.save()
         return self.object
 
-class BlogCreateView(CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
     form_class = BlogForm
     template_name = 'blog/blog_form.html'
@@ -43,7 +44,7 @@ class BlogCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('blog:blog_detail', kwargs={'pk': self.object.pk})
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
     form_class = BlogForm
     template_name = 'blog/blog_form.html'
@@ -53,7 +54,7 @@ class BlogUpdateView(UpdateView):
         return reverse_lazy('blog:blog_detail', kwargs={'pk': self.object.pk})
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog
     template_name = 'blog/blog_config_delete.html'
     success_url = reverse_lazy('blog:blog_list')
