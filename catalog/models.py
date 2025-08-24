@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Category(models.Model):
@@ -28,6 +29,14 @@ class Product(models.Model):
         help_text='Установите флажок для публикации записи на сайте',
         verbose_name='Опубликован',
     )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, # удаляются продукты при удалении пользователя
+        # on_delete=models.SET_NULL, при удалении пользователя, поле owner будет установлено в NULL
+        null=True, blank=True, # позволяют полю быть пустым
+        related_name='products', # позволяет получить все продукты пользователя через user.products.all()
+        verbose_name='Владелец'
+    )
 
     def __str__(self):
         return self.title
@@ -38,5 +47,6 @@ class Product(models.Model):
         ordering = ['title']
         permissions = [
             ('can_unpublish_product', 'can unpublish product'),
+            ('can_publish_product', 'сan publish product')
         ]
 
