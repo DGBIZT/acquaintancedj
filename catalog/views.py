@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from catalog.models import Product
 from django.urls import reverse_lazy
 
@@ -68,6 +68,13 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.object
+        context['can_edit'] = product.owner == self.request.user or self.request.user.has_perm(
+            'catalog.can_publish_product')
+        return context
+
     # def get_object(self, queryset=None): # Счетчик просмотра страницы продукта
     #     self.object = super().get_object(queryset)
     #     self.object.views_count += 1
@@ -92,18 +99,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user  # автоматически устанавливаем владельца
         return super().form_valid(form)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['can_publish'] = self.request.user.has_perm('catalog.can_publish_product')
-    #     context['can_unpublish'] = self.request.user.has_perm('catalog.can_unpublish_product')
-    #     return context
-    #
-    # def get_queryset(self):
-    #     # Фильтруем только опубликованные статьи
-    #     user = self.request.user
-    #     if user.is_staff:
-    #         return Product.objects.all()
-    #     return Product.objects.filter(is_published=True)
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -118,6 +113,10 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
     form_class = ProductForm
     template_name = 'catalog/catalog_form.html'
     # success_url = reverse_lazy('blog:blog_detail')
+
+    def test_func(self):
+        product = self.get_object()
+        return product.owner == self.request.user or self.request.user.has_perm('catalog.can_publish_product')
 
     def get_success_url(self): # Возвращение на страницу только что отредактируемого блога
         return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
@@ -142,3 +141,7 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_config_delete.html'
     success_url = reverse_lazy('catalog:home')
+
+    def test_func(self):
+        product = self.get_object()
+        return product.owner == self.request.user or self.request.user.has_perm('catalog.can_publish_product')
