@@ -39,7 +39,7 @@
                                         <div class="form-check form-switch me-2">
                                             <input
                                                 class="form-check-input" type="checkbox" name="is_published" role="switch"
-                                                id="switchCheckDefault_{{ product.id }}" value="on" {% if product.is_published %}checked{% endif %}>
+                                                id="switchCheckDefault_{{ product.id }}" value="on" {% if product.is_published %}checked{% else %}{% endif %}>
                                             <label class="form-check-label" for="switchCheckDefault_{{ product.id }}">
                                                 {% if product.is_published %}
                                                     Публикация активна

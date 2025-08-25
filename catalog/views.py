@@ -92,6 +92,26 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user  # автоматически устанавливаем владельца
         return super().form_valid(form)
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['can_publish'] = self.request.user.has_perm('catalog.can_publish_product')
+    #     context['can_unpublish'] = self.request.user.has_perm('catalog.can_unpublish_product')
+    #     return context
+    #
+    # def get_queryset(self):
+    #     # Фильтруем только опубликованные статьи
+    #     user = self.request.user
+    #     if user.is_staff:
+    #         return Product.objects.all()
+    #     return Product.objects.filter(is_published=True)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Убираем поле is_published, если у пользователя нет права публиковать
+        if not self.request.user.has_perm('catalog.can_publish_product'):
+            form.fields.pop('is_published', None)
+        return form
+
 
 class ProductUpdateView(LoginRequiredMixin,UpdateView):
     model = Product
@@ -101,6 +121,21 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
 
     def get_success_url(self): # Возвращение на страницу только что отредактируемого блога
         return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Показываем is_published только если есть право
+        if not self.request.user.has_perm('catalog.can_publish_product'):
+            form.fields.pop('is_published', None)
+        return form
+
+    def get_queryset(self):
+        user = self.request.user
+        # Модераторы и админы видят все товары
+        if user.has_perm('catalog.can_publish_product'):
+            return Product.objects.all()
+        # Обычные пользователи — только свои
+        return Product.objects.filter(owner=user)
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):

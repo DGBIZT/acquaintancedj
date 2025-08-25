@@ -20,7 +20,7 @@ def validate_forbidden_words(value):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['title', 'description', 'image', 'purchase_price', 'category',]
+        fields = ['title', 'description', 'image', 'purchase_price', 'category', 'is_published']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,6 +29,7 @@ class ProductForm(forms.ModelForm):
             'class': 'form-control',
             'placeholder' : 'Введите название товара'
         })
+
 
         self.fields['description'].widget.attrs.update({
             'class': 'form-control',
@@ -47,6 +48,8 @@ class ProductForm(forms.ModelForm):
         self.fields['category'].widget.attrs.update({
             'class': 'form-control',
         })
+
+
 
     def clean_title(self):
         title = self.cleaned_data.get('title')
