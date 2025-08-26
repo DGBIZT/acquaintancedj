@@ -20,7 +20,7 @@ def validate_forbidden_words(value):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['title', 'description', 'image', 'purchase_price', 'category',]
+        fields = ['title', 'description', 'image', 'purchase_price', 'category', 'is_published']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

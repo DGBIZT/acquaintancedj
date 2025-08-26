@@ -5,7 +5,7 @@ from .models import CustomUser
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         # Сначала вызываем родительский конструктор без kwargs
-        super().__init__(*args)
+        super().__init__(*args, **kwargs)
 
         # Обрабатываем request отдельно
         self.request = kwargs.pop('request', None)
@@ -88,3 +88,9 @@ class CustomUserCreationForm(UserCreationForm):
         if phone_number and not phone_number.isdigit():
             return forms.ValidationError('Номер телефона должен состоять только из цифр')
         return phone_number
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError('Пользователь с таким email уже существует')
+        return email

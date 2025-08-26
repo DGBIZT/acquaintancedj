@@ -31,13 +31,44 @@
                             <li>Дата добавления продукта: {{product.created_at|date:"d M Y"}}</li>
                             <li>Дата обновления продукта: {{product.updated_at|date:"d M Y"}}</li>
                         </ul>
-                        <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
+                       {% if user.is_authenticated %}
+                           {% if can_publish or can_unpublish %}
+                                <div class="d-flex align-items-center">
+                                    <form method="POST" action="{% url 'catalog:publish' product.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-check form-switch me-2">
+                                            <input
+                                                class="form-check-input" type="checkbox" name="is_published" role="switch"
+                                                id="switchCheckDefault_{{ product.id }}" value="on" {% if product.is_published %}checked{% else %}{% endif %}>
+                                            <label class="form-check-label" for="switchCheckDefault_{{ product.id }}">
+                                                {% if product.is_published %}
+                                                    Публикация активна
+                                                {% else %}
+                                                    Публикация не активна
+                                                {% endif %}
+                                            </label>
+                                        </div>
+                                    </form>
+                                    <div>
+                                        <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
+                                    </div>
+                                </div>
+                           {% else %}
+                                <div>
+                                    <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
+                                </div>
+                                {% endif %}
+                       {% else %}
+                            <div>
+                                <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
+                            </div>
+                       {% endif %}
                         <button type="button" class="btn btn-lg btn-outline-primary custom-button custom-button-list">Купить</button>
+
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
-
 {% endblock %}

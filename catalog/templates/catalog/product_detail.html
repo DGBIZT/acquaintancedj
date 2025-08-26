@@ -15,8 +15,10 @@
         <p>Дата добавления продукта: {{product.created_at|date:"d M Y"}}</p>
         <p>Дата обновления продукта: {{product.updated_at|date:"d M Y"}}</p>
         <p>
+             {% if can_edit %}
             <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-secondary">Редактировать</a>
             <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+            {% endif %}
             <a href="{% url 'catalog:home' %}" class="btn btn-primary">Вернуться</a>
         </p>
         <!--<p>Сгенерированный путь к изображению: {{ product.image.url }}</p>-->
