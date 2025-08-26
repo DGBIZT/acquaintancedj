@@ -30,7 +30,6 @@ class ProductForm(forms.ModelForm):
             'placeholder' : 'Введите название товара'
         })
 
-
         self.fields['description'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Описание продукта'
@@ -48,8 +47,6 @@ class ProductForm(forms.ModelForm):
         self.fields['category'].widget.attrs.update({
             'class': 'form-control',
         })
-
-
 
     def clean_title(self):
         title = self.cleaned_data.get('title')

@@ -108,7 +108,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return form
 
 
-class ProductUpdateView(LoginRequiredMixin,UpdateView):
+class ProductUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/catalog_form.html'
@@ -117,6 +117,9 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
     def test_func(self):
         product = self.get_object()
         return product.owner == self.request.user or self.request.user.has_perm('catalog.can_publish_product')
+
+    def handle_no_permission(self):
+        return HttpResponseForbidden("У вас нет прав для редактирования этого продукта.")
 
     def get_success_url(self): # Возвращение на страницу только что отредактируемого блога
         return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
@@ -137,11 +140,14 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
         return Product.objects.filter(owner=user)
 
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_config_delete.html'
     success_url = reverse_lazy('catalog:home')
 
     def test_func(self):
         product = self.get_object()
-        return product.owner == self.request.user or self.request.user.has_perm('catalog.can_publish_product')
+        return product.owner == self.request.user or self.request.user.has_perm('catalog.catalog.delete_product')
+
+    def handle_no_permission(self):
+        return HttpResponseForbidden("У вас нет прав для удаления этого продукта.")
