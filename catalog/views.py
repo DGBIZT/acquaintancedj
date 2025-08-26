@@ -147,7 +147,13 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         product = self.get_object()
-        return product.owner == self.request.user or self.request.user.has_perm('catalog.catalog.delete_product')
+        # Модератор может удалить ЛЮБОЙ продукт, если у него есть право 'catalog.delete_product'
+        # Владелец может удалить только свой продукт
+        return (
+                product.owner == self.request.user or
+                self.request.user.has_perm('catalog.delete_product')  # Правильно: без лишнего 'catalog.'
+        )
+        # return product.owner == self.request.user or self.request.user.has_perm('catalog.catalog.delete_product')
 
     def handle_no_permission(self):
         return HttpResponseForbidden("У вас нет прав для удаления этого продукта.")
