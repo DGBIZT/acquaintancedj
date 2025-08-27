@@ -4,8 +4,18 @@
     <nav class="ms-5 d-flex">
         <a class="p-2 btn btn-outline-primary me-2" href="/catalog/home">Каталог</a>
         <a class="p-2 btn btn-outline-primary me-2" href="/catalog/contacts/">Контакты</a>
-        <a class="p-2 btn btn-outline-primary" href="/blog/blog_list/">Наши блоги</a>
+        <a class="p-2 btn btn-outline-primary me-2 " href="/blog/blog_list/">Наши блоги</a>
     </nav>
+    <div class="dropdown  ">
+        <button class="p-2 btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Категории
+        </button>
+        <ul class="dropdown-menu ">
+            <li><a class="dropdown-item" href="/catalog/category/6/">Овощи</a></li>
+            <li><a class="dropdown-item" href="/catalog/category/7/">Крупа</a></li>
+            <li><a class="dropdown-item" href="/catalog/category/8/">Фрукты</a></li>
+        </ul>
+    </div>
     <div class="ms-auto d-flex flex-wrap">
 
         {% if user.is_authenticated %}
