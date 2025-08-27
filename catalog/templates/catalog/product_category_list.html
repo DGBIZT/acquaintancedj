@@ -1,0 +1,73 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Категория продуктов{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">{{ category.title }}</h1>
+    <p>Найдено товаров: {{ product_count }}</p>
+    <div class="container mt-5">
+        <div class="row row-cols-1 row-cols-md-3 g-4"> <!-- g-4 добавляет отступы между карточками -->
+            {% for product in products %}
+                <div class="col">
+                <div class="card  card-list mb-4">
+                    <div class="card-header card-header-list">
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}" class="card-img-top card-img-top-list" width="300" height="300">
+                    </div>
+                    <div class="card-body" style="display: flex;
+                                                  flex-direction: column;
+                                                  justify-content: space-between;
+                                                  padding: 15px;
+                                                  height: 100%;">
+                        <h5 class="card-title card-title-list">{{ product.title }}</h5>
+                        <h6 class="card-subtitle card-subtitle-list mb-2 text-muted">₽ {{ product.purchase_price }}</h6>
+                        <div class="card-text card-text-list">
+                            {{ product.description|truncatechars:100 }}
+                        </div>
+                        <ul class="list-unstyled">
+                            <li>Дата добавления продукта: {{product.created_at|date:"d M Y"}}</li>
+                            <li>Дата обновления продукта: {{product.updated_at|date:"d M Y"}}</li>
+                        </ul>
+                       {% if user.is_authenticated %}
+                           {% if can_publish or can_unpublish %}
+                                <div class="d-flex align-items-center">
+                                    <form method="POST" action="{% url 'catalog:publish' product.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-check form-switch me-2">
+                                            <input
+                                                class="form-check-input" type="checkbox" name="is_published" role="switch"
+                                                id="switchCheckDefault_{{ product.id }}" value="on" {% if product.is_published %}checked{% else %}{% endif %}>
+                                            <label class="form-check-label" for="switchCheckDefault_{{ product.id }}">
+                                                {% if product.is_published %}
+                                                    Публикация активна
+                                                {% else %}
+                                                    Публикация не активна
+                                                {% endif %}
+                                            </label>
+                                        </div>
+                                    </form>
+                                    <div>
+                                        <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
+                                    </div>
+                                </div>
+                           {% else %}
+                                <div>
+                                    <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
+                                </div>
+                                {% endif %}
+                       {% else %}
+                            <div>
+                                <a href="{% url 'catalog:product_detail' product.id %}" class="link-danger">Перейти</a>
+                            </div>
+                       {% endif %}
+                        <button type="button" class="btn btn-lg btn-outline-primary custom-button custom-button-list">Купить</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

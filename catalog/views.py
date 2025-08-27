@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from catalog.models import Product
+from catalog.models import Product, Category
 from django.urls import reverse_lazy
 
 
@@ -60,6 +60,34 @@ class SubmitDataView(View): # SubmitDataView — это гибкий инстр�
 
     def post(self): # def post(self, request, *args, **kwargs):
         return HttpResponse("Данные отправлены")
+
+
+class CategoryProductsView(View):
+    model = Product
+    template_name = 'catalog/product_category_list.html'
+
+    def get(self, request, category_id: int):
+        user = request.user
+
+        # Получаем категорию с обработкой ошибки
+        category = get_object_or_404(Category, id=category_id)
+
+        if user.is_staff:
+            products = Product.objects.filter(category=category)
+        else:
+            products = Product.objects.filter(
+                category=category,
+                is_published=True
+            )
+
+        context = {
+            'category': category,
+            'products': products,
+            'is_staff': user.is_staff,
+            'product_count': products.count()
+        }
+
+        return render(request, self.template_name, context)
 
 
 class ProductListView(ListView):
