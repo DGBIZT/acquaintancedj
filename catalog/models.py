@@ -49,4 +49,3 @@ class Product(models.Model):
             ('can_unpublish_product', 'can unpublish product'),
             ('can_publish_product', 'сan publish product')
         ]
-
