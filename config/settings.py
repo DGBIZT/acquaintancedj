@@ -179,3 +179,4 @@ CACHES = {
         'LOCATION': 'redis://localhost:6379/1',
     }
 }
+CACHE_ENABLED = True
